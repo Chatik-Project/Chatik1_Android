@@ -29,7 +29,6 @@ class MessageFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
         return inflater.inflate(R.layout.fragment_message, container, false)
     }
 
@@ -69,7 +68,6 @@ class MessageFragment : Fragment() {
                 .subscribe()
 
         sendMessage.setOnClickListener {
-
             if (inputMessage.text.isNotEmpty()) {
                 try {
                     socket.emit("msg", inputMessage.text.toString())
