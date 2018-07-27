@@ -33,7 +33,6 @@ class MessageFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_message, container, false)
     }
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -68,9 +67,6 @@ class MessageFragment : Fragment() {
                     recyclerView.scrollToPosition(adapter.list!!.size - 1)
                 }
                 .subscribe()
-
-        //    if (list.isEmpty()) messageStatus.visibility = View.VISIBLE
-
 
         sendMessage.setOnClickListener {
 

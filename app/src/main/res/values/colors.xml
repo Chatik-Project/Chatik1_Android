@@ -4,6 +4,5 @@
     <color name="colorPrimaryDark">#002984</color>
     <color name="colorAccent">#FF4081</color>
     <color name="fragment_message_main_constraint_background">#efebe9</color>
-    <color name="template_for_item_second_constraint_layout_user_name_text_color">#efebe9</color>
-    <color name="ic_launcher_background">#ffffff</color>
+    <color name="template_for_item_second_constraint_layout_user_name_text_color">#4dd0e1</color>
 </resources>

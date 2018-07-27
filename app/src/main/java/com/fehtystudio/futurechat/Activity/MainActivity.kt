@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, object : VKCallback<VKAccessToken> {
                     override fun onResult(res: VKAccessToken?) {
                         getUserData()
-                        //Log.e("*#*#*#", "User has authorized!!! ${res!!.accessToken} ${res.userId}")
+//                        Log.e("*#*#*#", "User has authorized!!! ${res!!.accessToken} ${res.userId}")
                     }
 
                     override fun onError(error: VKError?) {
@@ -64,10 +64,10 @@ class MainActivity : AppCompatActivity() {
 
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<GetUserData>?, response: Response<GetUserData>?) {
-                //   Log.e("*#*#*#", "onSuccess ${response!!.body()!!.response[0].photoMaxOrig}")
-           //     Picasso.get().load(response?.body()?.response!![0].photoMaxOrig).into(userSettings)
+//                Log.e("*#*#*#", "onSuccess ${response!!.body()!!.response[0].photoMaxOrig}")
+//                Picasso.get().load(response?.body()?.response!![0].photoMaxOrig).into(userSettings)
                 userName.setText("${response!!.body()!!.response[0].firstName} ${response.body()!!.response[0].lastName}")
-                vkAuth.setText("log out")
+                vkAuth.text = "log out"
                 val realm = Realm.getDefaultInstance()
                 val realmDatabase = RealmDatabase()
                 realm.executeTransaction {
