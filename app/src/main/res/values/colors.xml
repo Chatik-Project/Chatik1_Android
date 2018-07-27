@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#3f51b5</color>
+    <color name="colorPrimaryDark">#002984</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="fragment_message_main_constraint_background">#efebe9</color>
+    <color name="template_for_item_second_constraint_layout_user_name_text_color">#efebe9</color>
+    <color name="ic_launcher_background">#ffffff</color>
 </resources>
