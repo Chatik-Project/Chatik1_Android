@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.fehtystudio.futurechat.DataClass.MessageData
 import com.fehtystudio.futurechat.R
 
-class RecyclerViewAdapter(var list: MutableList<MessageData>? = null) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+class RecyclerViewAdapter(var list: MutableList<MessageData>? = mutableListOf()) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.template_for_item, parent, false)

@@ -2,7 +2,6 @@
     <string name="app_name">FutureChat</string>
     <string name="activity_main_app_name_text">Chat of the future</string>
     <string name="activity_main_user_settings_content_description">userSettingsIcon</string>
-    <string name="fragment_message_message_status_text">No messages</string>
     <string name="fragment_message_input_message_hint">Message…</string>
     <string name="fragment_message_send_message_content_description">iconToSendMessage</string>
     <string name="fragment_message_send_message_text">Send</string>

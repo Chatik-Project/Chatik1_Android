@@ -33,13 +33,17 @@ class MessageFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_message, container, false)
     }
 
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val list = mutableListOf<MessageData>()
-        val adapter = RecyclerViewAdapter(list)
+        val adapter = RecyclerViewAdapter()
 
         Observable.create<Any> { emitter ->
+
+            recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+            recyclerView.adapter = adapter
+
             socket.connect()
             socket.on(Socket.EVENT_CONNECT) {
                 socket.emit("receiveHistory")
@@ -65,12 +69,8 @@ class MessageFragment : Fragment() {
                 }
                 .subscribe()
 
-        if (list.isEmpty()) messageStatus.visibility = View.VISIBLE
+        //    if (list.isEmpty()) messageStatus.visibility = View.VISIBLE
 
-        recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = adapter
-        recyclerView.scrollToPosition(adapter.list!!.size - 1)
-        messageStatus.visibility = View.GONE
 
         sendMessage.setOnClickListener {
 
