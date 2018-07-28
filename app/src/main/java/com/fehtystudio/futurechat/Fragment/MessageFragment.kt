@@ -28,6 +28,7 @@ class MessageFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         Observable.just(socket.connect()).subscribeOn(Schedulers.io()).subscribe()
+        socketWork()
         return inflater.inflate(R.layout.fragment_message, container, false)
     }
 
@@ -38,18 +39,21 @@ class MessageFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        inputMessage.isEnabled = false
+        sendMessage.isEnabled = false
+
         recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
-
-        socketWork()
 
         sendMessage.setOnClickListener {
             when {
                 inputMessage.text.isNotEmpty() -> {
+                    val calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT-1"))
+                    val time = "${String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY))}:${String.format("%02d", calendar.get(Calendar.MINUTE))}"
+                    adapter.addItemToTheList(MessageData(realm.where(RealmDatabase::class.java).findFirst()!!.username!!, time, inputMessage.text.toString().trim()))
                     recyclerView.scrollToPosition(adapter.list!!.size - 1)
                     socket.emit("changeName", realm.where(RealmDatabase::class.java).findFirst()?.username)
                     socket.emit("msg", inputMessage.text.toString().trim())
-                    recyclerView.scrollToPosition(adapter.list!!.size - 1)
                     inputMessage.text.clear()
                 }
                 else -> Toast.makeText(activity, "Empty field", Toast.LENGTH_SHORT).show()
@@ -61,7 +65,6 @@ class MessageFragment : Fragment() {
         }
     }
 
-
     override fun onResume() {
         super.onResume()
         val result = realm.where(RealmDatabase::class.java).findFirst()?.username
@@ -72,10 +75,8 @@ class MessageFragment : Fragment() {
                     realmDatabase.username = "Anonymous$random"
                     realm.insertOrUpdate(realmDatabase)
                 }
-                // Возможно!!!
                 socket.emit("changeName", result)
             }
-        // Возможно!!!
             else -> socket.emit("changeName", result)
         }
     }
@@ -96,7 +97,9 @@ class MessageFragment : Fragment() {
                 val userName = (it[0] as JSONObject).getString("username")
                 val timeOfAddition = (it[0] as JSONObject).getString("date")
                 val message = (it[0] as JSONObject).getString("content")
-                emitter.onNext(MessageData(userName, timeOfAddition, message))
+                if (userName != Realm.getDefaultInstance().where(RealmDatabase::class.java).findFirst()!!.username!!) {
+                    emitter.onNext(MessageData(userName, timeOfAddition, message))
+                }
             }
         }
                 .subscribeOn(Schedulers.io())
@@ -105,6 +108,10 @@ class MessageFragment : Fragment() {
                     adapter.addItemToTheList(it as MessageData)
                     recyclerView.scrollToPosition(adapter.list!!.size - 1)
                 }
-                .subscribe()
+                .subscribe {
+                    progressBar.visibility = View.GONE
+                    inputMessage.isEnabled = true
+                    sendMessage.isEnabled = true
+                }
     }
 }

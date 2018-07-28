@@ -39,7 +39,10 @@ class RecyclerViewAdapter(var list: MutableList<MessageData>? = mutableListOf())
         @SuppressLint("SimpleDateFormat")
         fun bind(messageData: MessageData) {
             userName.text = messageData.userName
-            timeOfAddition.text = SimpleDateFormat("HH:mm").format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS").parse(messageData.timeOfAddition))
+            when {
+                messageData.timeOfAddition.length > 6 -> timeOfAddition.text = SimpleDateFormat("HH:mm").format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS").parse(messageData.timeOfAddition))
+                else -> timeOfAddition.text = messageData.timeOfAddition
+            }
             message.text = messageData.message
         }
     }
