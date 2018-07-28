@@ -3,7 +3,6 @@ package com.fehtystudio.futurechat.Fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import io.socket.client.IO
-import io.socket.client.Socket
 import kotlinx.android.synthetic.main.fragment_message.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -25,7 +23,7 @@ import java.util.*
 
 class MessageFragment : Fragment() {
 
-    private val socket = IO.socket("http://138.68.234.86:7777/")
+    private val socket = IO.socket("http://138.68.234.86:7777/")!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -37,13 +35,12 @@ class MessageFragment : Fragment() {
 
         val adapter = RecyclerViewAdapter()
 
+        recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        recyclerView.adapter = adapter
+        socket.connect()
+
         Observable.create<Any> { emitter ->
-
-            recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            recyclerView.adapter = adapter
-
-            socket.connect()
-            socket.on(Socket.EVENT_CONNECT) {
+            socket.on("connected") {
                 socket.emit("receiveHistory")
             }.on("history") {
                 val obj = it[0] as JSONArray
@@ -54,9 +51,9 @@ class MessageFragment : Fragment() {
                     emitter.onNext(MessageData(userId, content))
                 }
             }.on("message") {
-                val userId = (it[0] as JSONObject).getString("username")
+                val userName = (it[0] as JSONObject).getString("username")
                 val content = (it[0] as JSONObject).getString("content")
-                emitter.onNext(MessageData(userId, content))
+                emitter.onNext(MessageData(userName, content))
             }
         }
                 .subscribeOn(Schedulers.io())
@@ -69,28 +66,27 @@ class MessageFragment : Fragment() {
 
         sendMessage.setOnClickListener {
             if (inputMessage.text.isNotEmpty()) {
-                try {
-                    socket.emit("msg", inputMessage.text.toString())
-                    inputMessage.text.clear()
-                } catch (ex: Exception) {
-                    Log.e("#*#*", ex.toString())
-                }
+                recyclerView.scrollToPosition(adapter.list!!.size - 1)
+                val realm = Realm.getDefaultInstance()
+                socket.emit("changeName", realm.where(RealmDatabase::class.java).findFirst()?.username)
+                socket.emit("msg", inputMessage.text.toString().trim())
+                recyclerView.scrollToPosition(adapter.list!!.size - 1)
+                inputMessage.text.clear()
             } else {
                 Toast.makeText(activity, "Empty field", Toast.LENGTH_SHORT).show()
             }
         }
+
+        recyclerView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            recyclerView.scrollToPosition(adapter.list!!.size - 1)
+        }
     }
 
-    override fun onPause() {
-        super.onPause()
-        socket.disconnect()
-    }
+    val realmDatabase = RealmDatabase()
 
     override fun onResume() {
         super.onResume()
-        socket.connect()
         val realm = Realm.getDefaultInstance()
-        val realmDatabase = RealmDatabase()
         val result = realm.where(RealmDatabase::class.java).findFirst()?.username
         if (result == null) {
             val random = Random().nextInt(9999999)
@@ -98,8 +94,13 @@ class MessageFragment : Fragment() {
             realm.executeTransaction {
                 realm.insertOrUpdate(realmDatabase)
             }
-            socket.emit("changeName", random.toString())
+            socket.emit("changeName", realm.where(RealmDatabase::class.java).findFirst()?.username)
+        } else {
+            socket.emit("changeName", realm.where(RealmDatabase::class.java).findFirst()?.username)
         }
-        socket.emit("changeName", result)
+    }
+
+    fun changeName(name: String) {
+        socket.emit("changeName", name)
     }
 }

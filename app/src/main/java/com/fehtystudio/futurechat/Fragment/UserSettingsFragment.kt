@@ -50,6 +50,26 @@ class UserSettingsFragment : DialogFragment() {
             vkAuth.text = "Log out"
         }
 
+        saveAndBack.setOnClickListener {
+            if (userName.text.isNotEmpty()) {
+                MessageFragment().changeName(userName.text.toString())
+                realm.executeTransaction {
+                    realm.where(RealmDatabase::class.java).findAll().deleteAllFromRealm()
+                    realmDatabase.username = userName.text.toString().trim()
+                    realm.insertOrUpdate(realmDatabase)
+                }
+                MessageFragment().changeName(userName.text.toString().trim())
+            } else {
+                val random = Random().nextInt(9999999)
+                realm.executeTransaction {
+                    realm.where(RealmDatabase::class.java).findAll().deleteAllFromRealm()
+                    realmDatabase.username = "Anonymous$random"
+                    realm.insertOrUpdate(realmDatabase)
+                }
+            }
+            this.dismiss()
+        }
+
         vkAuth.setOnClickListener {
             if (!VKSdk.isLoggedIn()) {
                 VKSdk.login(this, "")
@@ -64,15 +84,6 @@ class UserSettingsFragment : DialogFragment() {
                 }
                 userName.setText(realm.where(RealmDatabase::class.java).findFirst()!!.username)
             }
-        }
-
-        saveAndBack.setOnClickListener {
-            realm.executeTransaction {
-                realm.where(RealmDatabase::class.java).findAll().deleteAllFromRealm()
-                realmDatabase.username = userName.text.toString()
-                realm.insertOrUpdate(realmDatabase)
-            }
-            this.dismiss()
         }
     }
 

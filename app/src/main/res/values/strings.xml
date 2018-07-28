@@ -5,7 +5,6 @@
     <string name="fragment_message_input_message_hint">Message…</string>
     <string name="fragment_message_send_message_content_description">iconToSendMessage</string>
     <string name="fragment_message_send_message_text">Send</string>
-    <string name="fragment_user_settings_user_name_hint">Name</string>
     <string name="fragment_user_settings_save_and_back_text">Save and Back</string>
     <string name="fragment_user_settings_vk_auth_text">Auth</string>
     <string name="template_for_item_user_icon_content_description">iconOfEachUser</string>
