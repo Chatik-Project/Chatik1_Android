@@ -95,13 +95,11 @@ class UserSettingsFragment : DialogFragment() {
     }
 
     fun getUserData() {
-
         val retrofit = Retrofit.Builder()
                 .baseUrl("https://api.vk.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(GetUserDataInterface::class.java)
-
         retrofit.getUserData().enqueue(object : Callback<GetUserData> {
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<GetUserData>?, response: Response<GetUserData>?) {

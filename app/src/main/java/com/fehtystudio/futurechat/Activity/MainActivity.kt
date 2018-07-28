@@ -9,6 +9,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val userSettingsFragment = UserSettingsFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,7 +21,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
 
         userSettings.setOnClickListener {
-            UserSettingsFragment().show(fragmentManager, "1")
+            userSettingsFragment.show(fragmentManager, "1")
         }
     }
 }
