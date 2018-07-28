@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3f51b5</color>
-    <color name="colorPrimaryDark">#002984</color>
+    <color name="colorPrimary">#1565c0</color>
+    <color name="colorPrimaryDark">#003c8f</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="fragment_message_main_constraint_background">#efebe9</color>
-    <color name="template_for_item_second_constraint_layout_user_name_text_color">#4dd0e1</color>
+    <color name="fragment_message_main_constraint_background">#fafafa</color>
 </resources>

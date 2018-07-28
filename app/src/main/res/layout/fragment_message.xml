@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fragment_message_main_constraint_background"
+    android:background="@drawable/bg_wallpaper"
     tools:context=".Fragment.MessageFragment">
 
     <android.support.v7.widget.RecyclerView
@@ -14,7 +14,8 @@
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/template_for_item" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout"

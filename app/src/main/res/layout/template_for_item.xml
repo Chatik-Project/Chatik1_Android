@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/template_for_item_main_constraint_padding">
+    android:padding="@dimen/template_for_item_main_constraint_padding"
+    tools:background="@color/colorPrimary">
 
     <ImageView
         android:id="@+id/userIcon"
@@ -12,52 +13,67 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/template_for_item_user_icon_margin_start"
         android:background="@drawable/background_avatar"
-        android:backgroundTint="@color/colorPrimary"
         android:contentDescription="@string/template_for_item_user_icon_content_description"
         android:src="@drawable/ic_sentiment_satisfied"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/constraintOfMessage"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="@dimen/template_for_item_second_constraint_layout_width"
+        android:id="@+id/constraintOfMessage"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/background_chat_bubble"
-        android:backgroundTint="@color/colorPrimary"
+        android:maxWidth="@dimen/template_for_item_constraint_of_message_max_width"
         android:padding="@dimen/template_for_item_second_constraint_layout_padding"
         android:paddingStart="@dimen/template_for_item_second_constraint_layout_padding_start"
         app:layout_constraintBottom_toBottomOf="@+id/userIcon"
         app:layout_constraintStart_toEndOf="@+id/userIcon"
-        app:layout_constraintWidth_max="300dp"
-        app:layout_constraintWidth_min="200dp"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RtlSymmetry">
 
         <TextView
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/template_for_item_second_constraint_layout_user_name_text_color"
+            android:layout_marginBottom="@dimen/template_for_item_constraint_of_message_user_name_margin_bottom"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintBottom_toTopOf="@+id/userMessage"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="@string/template_for_item_second_constraint_layout_user_name_tools_text" />
 
         <TextView
+            android:id="@+id/timeOfAddition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/template_for_item_constraint_of_message_time_of_addition_margin_start"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/template_for_item_constraint_of_message_time_of_addition_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/userName"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="21:32" />
+
+        <TextView
             android:id="@+id/userMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:maxEms="9"
+            android:minWidth="@dimen/template_for_item_constraint_of_message_user_message_min_width"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/template_for_item_second_constraint_layout_user_message_text_size"
             android:textStyle="italic"
-            app:layout_constraintBottom_toTopOf="@id/userName"
-            app:layout_constraintEnd_toEndOf="@id/userName"
-            app:layout_constraintStart_toStartOf="@+id/userName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userName"
-            tools:text="@string/template_for_item_second_constraint_layout_user_message_tools_text" />
-
+            tools:text="MyMessage" />
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

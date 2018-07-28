@@ -46,14 +46,16 @@ class MessageFragment : Fragment() {
                 val obj = it[0] as JSONArray
                 for (i in 0 until obj.length()) {
                     val data = obj[i] as JSONObject
-                    val userId = data.getString("username")
+                    val userName = data.getString("username")
                     val content = data.getString("content")
-                    emitter.onNext(MessageData(userId, content))
+                    val timeOfAddition = data.getString("date")
+                    emitter.onNext(MessageData(userName, content, timeOfAddition))
                 }
             }.on("message") {
                 val userName = (it[0] as JSONObject).getString("username")
                 val content = (it[0] as JSONObject).getString("content")
-                emitter.onNext(MessageData(userName, content))
+                val timeOfAddition = (it[0] as JSONObject).getString("date")
+                emitter.onNext(MessageData(userName, content, timeOfAddition))
             }
         }
                 .subscribeOn(Schedulers.io())
@@ -82,7 +84,7 @@ class MessageFragment : Fragment() {
         }
     }
 
-    val realmDatabase = RealmDatabase()
+    private val realmDatabase = RealmDatabase()
 
     override fun onResume() {
         super.onResume()

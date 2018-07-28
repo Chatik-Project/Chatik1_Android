@@ -8,8 +8,7 @@
     <string name="fragment_user_settings_save_and_back_text">Save and Back</string>
     <string name="fragment_user_settings_vk_auth_text">Auth</string>
     <string name="template_for_item_user_icon_content_description">iconOfEachUser</string>
-    <string name="template_for_item_second_constraint_layout_user_name_tools_text">guest324234</string>
-    <string name="template_for_item_second_constraint_layout_user_message_tools_text">MyMessage</string>
+    <string name="template_for_item_second_constraint_layout_user_name_tools_text">Anonymous4262573</string>
     <string name="fragment_user_settings_name_title_text">Name</string>
     <integer name="com_vk_sdk_AppId">6641389</integer>
 </resources>
