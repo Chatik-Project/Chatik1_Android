@@ -33,19 +33,14 @@ class RecyclerViewAdapter(var list: MutableList<MessageData>? = mutableListOf())
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val userName = view.findViewById<TextView>(R.id.userName)
-        private val itemText = view.findViewById<TextView>(R.id.userMessage)
         private val timeOfAddition = view.findViewById<TextView>(R.id.timeOfAddition)
-
-        fun bind(item: MessageData) {
-            userName.text = item.userName
-            itemText.text = item.message
-
-            timeOfAddition.text = formatDate(item.timeOfAddition)
-        }
+        private val message = view.findViewById<TextView>(R.id.userMessage)
 
         @SuppressLint("SimpleDateFormat")
-        private fun formatDate(dateString: String): String? {
-            return SimpleDateFormat("HH:mm").format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS").parse(dateString))
+        fun bind(messageData: MessageData) {
+            userName.text = messageData.userName
+            timeOfAddition.text = SimpleDateFormat("HH:mm").format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS").parse(messageData.timeOfAddition))
+            message.text = messageData.message
         }
     }
 }

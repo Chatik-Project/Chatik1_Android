@@ -32,68 +32,61 @@ class UserSettingsFragment : DialogFragment() {
         return inflater.inflate(R.layout.fragment_user_settings, container, false)
     }
 
+    private val realm = Realm.getDefaultInstance()
+    private val realmDatabase = RealmDatabase()
+
     @SuppressLint("SetTextI18n")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        val realm = Realm.getDefaultInstance()
-        val realmDatabase = RealmDatabase()
 
         realm.executeTransaction {
             val result = realm.where(RealmDatabase::class.java).findFirst()?.username.toString()
             userName.setText(result)
         }
 
-        if (!VKSdk.isLoggedIn()) {
-            vkAuth.text = "Log in"
-        } else if (VKSdk.isLoggedIn()) {
-            vkAuth.text = "Log out"
-        }
+        if (!VKSdk.isLoggedIn()) vkAuth.text = "Log in"
+        else if (VKSdk.isLoggedIn()) vkAuth.text = "Log out"
 
         saveAndBack.setOnClickListener {
-            if (userName.text.isNotEmpty()) {
-                MessageFragment().changeName(userName.text.toString())
-                realm.executeTransaction {
+            when {
+                userName.text.isNotEmpty() -> realm.executeTransaction {
                     realm.where(RealmDatabase::class.java).findAll().deleteAllFromRealm()
                     realmDatabase.username = userName.text.toString().trim()
                     realm.insertOrUpdate(realmDatabase)
                 }
-                MessageFragment().changeName(userName.text.toString().trim())
-            } else {
-                val random = Random().nextInt(9999999)
-                realm.executeTransaction {
-                    realm.where(RealmDatabase::class.java).findAll().deleteAllFromRealm()
-                    realmDatabase.username = "Anonymous$random"
-                    realm.insertOrUpdate(realmDatabase)
+                else -> {
+                    realm.executeTransaction {
+                        val random = Random().nextInt(9999999)
+                        realm.where(RealmDatabase::class.java).findAll().deleteAllFromRealm()
+                        realmDatabase.username = "Anonymous$random"
+                        realm.insertOrUpdate(realmDatabase)
+                    }
                 }
             }
             this.dismiss()
         }
 
         vkAuth.setOnClickListener {
-            if (!VKSdk.isLoggedIn()) {
-                VKSdk.login(this, "")
-            } else if (VKSdk.isLoggedIn()) {
-                VKSdk.logout()
-                userName.text.clear()
-                vkAuth.text = "Log in"
-                realm.executeTransaction {
-                    realm.where(RealmDatabase::class.java).findFirst()?.deleteFromRealm()
-                    realmDatabase.username = "Anonymous${Random().nextInt(9999999)}"
-                    realm.insertOrUpdate(realmDatabase)
+            when {
+                !VKSdk.isLoggedIn() -> VKSdk.login(this, "")
+                VKSdk.isLoggedIn() -> {
+                    VKSdk.logout()
+                    userName.text.clear()
+                    vkAuth.text = "Log in"
+                    realm.executeTransaction {
+                        realm.where(RealmDatabase::class.java).findFirst()?.deleteFromRealm()
+                        realmDatabase.username = "Anonymous${Random().nextInt(9999999)}"
+                        realm.insertOrUpdate(realmDatabase)
+                        userName.setText(realm.where(RealmDatabase::class.java).findFirst()!!.username)
+                    }
                 }
-                userName.setText(realm.where(RealmDatabase::class.java).findFirst()!!.username)
             }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, object : VKCallback<VKAccessToken> {
-                    override fun onResult(res: VKAccessToken?) {
-                        getUserData()
-//                        Log.e("*#*#*#", "User has authorized!!! ${res!!.accessToken} ${res.userId}")
-                    }
-
+                    override fun onResult(res: VKAccessToken?) = getUserData()
                     override fun onError(error: VKError?) {
                         Log.e("*##*#*", "User hasn't authorized")
                     }
@@ -110,15 +103,10 @@ class UserSettingsFragment : DialogFragment() {
                 .create(GetUserDataInterface::class.java)
 
         retrofit.getUserData().enqueue(object : Callback<GetUserData> {
-
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<GetUserData>?, response: Response<GetUserData>?) {
-//                Log.e("*#*#*#", "onSuccess ${response!!.body()!!.response[0].photoMaxOrig}")
-//                Picasso.get().load(response?.body()?.response!![0].photoMaxOrig).into(userSettings)
                 userName.setText("${response!!.body()!!.response[0].firstName} ${response.body()!!.response[0].lastName}")
                 vkAuth.text = "log out"
-                val realm = Realm.getDefaultInstance()
-                val realmDatabase = RealmDatabase()
                 realm.executeTransaction {
                     realm.where(RealmDatabase::class.java).findFirst()?.deleteFromRealm()
                     realmDatabase.username = "${response.body()!!.response[0].firstName} ${response.body()!!.response[0].lastName}"
@@ -126,9 +114,7 @@ class UserSettingsFragment : DialogFragment() {
                 }
             }
 
-            override fun onFailure(call: Call<GetUserData>?, t: Throwable?) {
-                Log.e("*#*#*", "onFailure", t)
-            }
+            override fun onFailure(call: Call<GetUserData>?, t: Throwable?) = Unit
         })
     }
 }

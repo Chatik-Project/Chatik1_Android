@@ -3,5 +3,4 @@
     <color name="colorPrimary">#1565c0</color>
     <color name="colorPrimaryDark">#003c8f</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="fragment_message_main_constraint_background">#fafafa</color>
 </resources>
