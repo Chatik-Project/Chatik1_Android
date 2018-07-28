@@ -2,9 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.fehtystudio.futurechat">
-
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name=".Application.MyApplication"
         android:allowBackup="true"
@@ -14,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:windowSoftInputMode="adjustPan"
         tools:ignore="GoogleAppIndexingWarning,InnerclassSeparator">
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
@@ -26,5 +25,4 @@
             android:label="ServiceActivity"
             android:theme="@style/VK.Transparent" />
     </application>
-
 </manifest>

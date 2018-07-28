@@ -23,7 +23,6 @@
                 android:id="@+id/appName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="serif"
                 android:text="@string/activity_main_app_name_text"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"

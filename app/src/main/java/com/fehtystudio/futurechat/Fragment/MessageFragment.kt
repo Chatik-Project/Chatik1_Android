@@ -94,7 +94,7 @@ class MessageFragment : Fragment() {
         val result = realm.where(RealmDatabase::class.java).findFirst()?.username
         if (result == null) {
             val random = Random().nextInt(9999999)
-            realmDatabase.username = "guest$random"
+            realmDatabase.username = "Anonymous$random"
             realm.executeTransaction {
                 realm.insertOrUpdate(realmDatabase)
             }
