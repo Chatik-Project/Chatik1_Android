@@ -111,6 +111,7 @@ class UserSettingsFragment : DialogFragment() {
                     realm.insertOrUpdate(realmDatabase)
                 }
             }
+
             override fun onFailure(call: Call<GetUserData>?, t: Throwable?) = Unit
         })
     }
